@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Love Website</title>
+<style>
+body,html{
+  margin:0;padding:0;height:100%;width:100%;
+  display:flex;justify-content:center;align-items:center;
+  flex-direction:column;text-align:center;
+  background:pink;font-family:'Poppins',sans-serif;
+  overflow-x:hidden;
+}
+
+/* hearts */
+.heart{position:fixed;width:20px;height:20px;background:red;
+  transform:rotate(45deg);top:-50px;z-index:0;}
+.heart::before,.heart::after{
+  content:"";position:absolute;width:20px;height:20px;background:red;border-radius:50%;}
+.heart::before{top:-10px;left:0;}
+.heart::after{top:0;left:-10px;}
+@keyframes fall{0%{transform:translateY(0)rotate(45deg);opacity:1;}
+100%{transform:translateY(100vh)rotate(45deg);opacity:0;}}
+
+/* page generic */
+.page{display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;}
+
+/* bubbles */
+#chatContainer{max-width:400px;display:flex;flex-direction:column;align-items:center;}
+.bubble{padding:10px 15px;margin:8px 0;border-radius:20px;max-width:80%;word-wrap:break-word;
+  animation:fadeIn .8s forwards;opacity:0;}
+@keyframes fadeIn{to{opacity:1;}}
+.userBubble{background:#ffb6c1;color:#fff;align-self:flex-end;}
+.botBubble{background:#fff;color:#333;align-self:flex-start;}
+
+/* input */
+#userInput{padding:10px;width:200px;margin-top:10px;border-radius:10px;border:1px solid #333;}
+#sendBtn{padding:10px 20px;margin-left:5px;border-radius:10px;cursor:pointer;}
+
+/* movie */
+.movieOption{display:inline-block;margin:10px;cursor:pointer;transition:transform .3s;}
+.movieOption img{width:120px;height:180px;border-radius:15px;}
+.genre{font-weight:bold;margin-top:5px;color:white;text-shadow:1px 1px 2px #000;}
+#movieBubble{margin-top:20px;font-size:1.2em;color:white;}
+
+/* surprise */
+#surpriseVideo{width:700px;max-width:90vw;margin-top:20px;border-radius:20px;display:none;
+  opacity:0;transition:opacity 1s ease;box-shadow:0 0 30px rgba(255,0,100,.5);}
+#surpriseVideo.show{opacity:1;}
+#playVideoBtn{padding:12px 30px;background:#ff4d6d;border:none;color:#fff;
+  border-radius:15px;font-size:1.2em;cursor:pointer;}
+
+/* letter page */
+#letterPage{flex-direction:column;align-items:center;justify-content:center;background:#fdf0d5;}
+.envelope{
+  width:80%;max-width:600px;height:80%;position:relative;cursor:pointer;transition:transform .8s ease;
+  border-radius:10px;box-shadow:0 0 20px rgba(0,0,0,0.3);background:#b5651d;
+}
+.envelope::before{
+  content:'';position:absolute;top:0;left:0;width:0;height:0;
+  border-left:50% solid transparent;
+  border-right:50% solid transparent;
+  border-bottom:50% solid #d18b47;
+  transition:transform .6s ease;transform-origin:top;
+}
+.envelope.open::before{transform:rotateX(180deg);}
+.letter{
+  width:100%;height:100%;background:#f5deb3;
+  position:absolute;top:0;left:0;border-radius:10px;
+  padding:40px 30px;font-family:'Courier New',monospace;
+  overflow:hidden;opacity:0;transition:opacity 1s ease;
+  box-shadow:inset 0 0 30px rgba(0,0,0,0.1),0 0 20px rgba(0,0,0,0.2);
+  line-height:1.5;
+  background-image:repeating-linear-gradient(#f5deb3 0px,#f5deb3 25px,#e4c28a 26px);
+}
+.letter.show{opacity:1;}
+.letter h3{margin-bottom:10px;color:#8b4513;font-weight:bold;font-size:1.2em;}
+.letter p{color:#5a3b1a;text-align:left;margin-bottom:10px;}
+#backHome{margin-top:20px;padding:12px 25px;background:#ff4d6d;color:white;border:none;border-radius:15px;font-size:1.1em;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<!-- Page 1 -->
+<div id="page1" class="page" style="display:flex;">
+  <h1>For My Loveeee 💖</h1>
+  <button id="openBtn">Open This!</button>
+</div>
+
+<!-- Page 2 -->
+<div id="page2" class="page">
+  <div id="chatContainer"></div>
+  <div>
+    <input type="text" id="userInput" placeholder="Type Yes or No..."/>
+    <button id="sendBtn">Send</button>
+  </div>
+</div>
+
+<!-- Movie Page -->
+<div id="moviePage" class="page">
+  <h2>What movie should we watch? 🍿🎬</h2>
+  <div id="movieOptions"></div>
+  <div id="movieBubble"></div>
+</div>
+
+<!-- Surprise Page -->
+<div id="surprisePage" class="page">
+  <h2>NOW YOU HAVE REACHED THIS PAGE 💌 I HAVE A LIL SOMETHING FOR YOU BEFORE WE WATCH 💖</h2>
+  <button id="playVideoBtn">Play 🎥</button>
+  <video id="surpriseVideo" controls>
+    <source src="surprise.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- Letter Page -->
+<div id="letterPage" class="page">
+  <h2>💌 A Letter For You 💌</h2>
+  <div class="envelope" id="envelope">
+    <div class="letter" id="letter">
+      <h3>“Love is patient, love is kind. It does not envy, it does not boast, it is not proud.”<br>— 1 Corinthians 13:4</h3>
+      <p>Hi loveeeyyy ko,</p>
+      <p>Gusto ko lang sabihin na super naappreciate po kita. Thank you kasi kahit pagod ka na sa school at may pasok ka pa the next day, nagagawa mo pa rin akong bigyan ng time. I know hindi madali, lalo na kapag late na tayo nag tatalk, pero you still choose to stay  and that means so much to me po loveey.</p>
+      <p>Even if I’m not there beside you, I hope you still feel my presence. Kahit malayo ako, gusto kong maramdaman mo na andito lang ako palagi para sayo. Through every chat, call, or goodnight message  I hope you feel how much I care and love you so so muchhh my loveeyy.</p>
+      <p>I promise to do my best to treat you better every day, and to love you the way you want and truly deserve. You’ve been so patient, understanding, and loving, and I’ll never take that for granted.</p>
+      <p>Thank you for choosing to stay, for giving me your time, and for loving me even from afar. You make everything worth it.</p>
+      <p>I love you so much, always. 💞<br>— your Arc</p>
+      <button id="backHome">Back to Home</button>
+    </div>
+  </div>
+</div>
+
+<audio id="bgMusic" src="bg-music.mp3" loop></audio>
+
+<script>
+const openBtn=document.getElementById('openBtn');
+const page1=document.getElementById('page1');
+const page2=document.getElementById('page2');
+const moviePage=document.getElementById('moviePage');
+const surprisePage=document.getElementById('surprisePage');
+const letterPage=document.getElementById('letterPage');
+const bgMusic=document.getElementById('bgMusic');
+const chatContainer=document.getElementById('chatContainer');
+const userInput=document.getElementById('userInput');
+const sendBtn=document.getElementById('sendBtn');
+const movieOptionsDiv=document.getElementById('movieOptions');
+const movieBubble=document.getElementById('movieBubble');
+const playVideoBtn=document.getElementById('playVideoBtn');
+const surpriseVideo=document.getElementById('surpriseVideo');
+const envelope=document.getElementById('envelope');
+const letter=document.getElementById('letter');
+const backHome=document.getElementById('backHome');
+
+const questions=[
+ {text:"Are you sleepy?",options:[{text:"Yes",reply:"Let's sleep na 😴💤"},{text:"No",reply:"What do you want to do po Loveeyyy?"}]},
+ {text:"Okay na ba pakiramdam mo?",options:[{text:"Yes",reply:"Tama yan kasi di ka madaldal pag may sakit ka ❤️"},{text:"No",reply:"Awww my babyyy, pagaling ka please 💖"}]},
+ {text:"Can we have a movie date tonight? 🎬💞",options:[{text:"Yes",reply:"Yehey! I love you 😍💖"},{text:"No",reply:"Awww, maybe next time 🙈"}]}
+];
+const movies=[
+ {img:"filipino.jpg",genre:"Filipino Movie",reply:"Eto gusto ko hehehehe 💖"},
+ {img:"american.jpg",genre:"American Movie",reply:"Ayaw ko niyan 🙈"},
+ {img:"korean.jpg",genre:"Korean Movie",reply:"Ayaw ko rin yan 😅"}
+];
+let currentQuestion=0;let clickedMovies=0;
+
+/* hearts */
+function createHeart(){
+ const h=document.createElement('div');
+ h.classList.add('heart');
+ h.style.left=Math.random()*window.innerWidth+'px';
+ h.style.animation=`fall ${3+Math.random()*2}s linear forwards`;
+ document.body.appendChild(h);
+ setTimeout(()=>h.remove(),5000);
+}
+setInterval(createHeart,300);
+
+/* start */
+openBtn.onclick=()=>{
+ page1.style.display='none';
+ page2.style.display='flex';
+ bgMusic.play().catch(()=>console.log('audio blocked'));
+ showQuestion();
+};
+function addBubble(text,type){
+ const b=document.createElement('div');
+ b.classList.add('bubble',type==='user'?'userBubble':'botBubble');
+ b.textContent=text;
+ chatContainer.appendChild(b);
+ chatContainer.scrollTop=chatContainer.scrollHeight;
+}
+function showQuestion(){
+ const q=questions[currentQuestion];
+ addBubble(q.text,'bot');
+}
+sendBtn.onclick=()=>{
+ const val=userInput.value.trim();if(!val)return;
+ addBubble(val,'user');
+ const q=questions[currentQuestion];
+ const match=q.options.find(o=>o.text.toLowerCase()===val.toLowerCase());
+ userInput.value='';
+ if(match){
+  addBubble(match.reply,'bot');
+  currentQuestion++;
+  if(currentQuestion<questions.length)setTimeout(showQuestion,500);
+  else{page2.style.display='none';moviePage.style.display='flex';showMovieOptions();}
+ }else addBubble("Hmm, I didn’t understand that 😅 (type Yes or No)",'bot');
+};
+function showMovieOptions(){
+ movieOptionsDiv.innerHTML='';clickedMovies=0;
+ movies.forEach(m=>{
+  const d=document.createElement('div');d.classList.add('movieOption');
+  const i=document.createElement('img');i.src=m.img;
+  const g=document.createElement('div');g.classList.add('genre');g.textContent=m.genre;
+  d.append(i,g);
+  d.onclick=()=>{
+   movieBubble.textContent=m.reply;
+   d.style.transform='scale(1.2)';setTimeout(()=>d.style.transform='scale(1)',400);
+   clickedMovies++;
+   if(clickedMovies===movies.length){
+     setTimeout(()=>{
+       bgMusic.pause();
+       bgMusic.currentTime=0;
+       moviePage.style.display='none';surprisePage.style.display='flex';
+     },500);
+   }
+  };
+  movieOptionsDiv.appendChild(d);
+ });
+}
+
+/* surprise */
+playVideoBtn.onclick=()=>{
+ bgMusic.pause();
+ surpriseVideo.style.display='block';
+ setTimeout(()=>surpriseVideo.classList.add('show'),50);
+ surpriseVideo.play();
+ surpriseVideo.onended=()=>{
+   surprisePage.style.display='none';
+   letterPage.style.display='flex';
+   bgMusic.play(); // resume bg music on letter page
+ };
+};
+
+/* letter */
+envelope.onclick=()=>{
+ envelope.classList.toggle('open');
+ setTimeout(()=>letter.classList.add('show'),600);
+};
+
+/* back to home */
+backHome.onclick=()=>{
+ location.reload();
+};
+</script>
+</body>
+</html>
