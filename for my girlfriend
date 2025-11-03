@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Love Website</title>
+<title>FOR JANELA NOLEAL</title>
 <style>
 body,html{
   margin:0;padding:0;height:100%;width:100%;
@@ -77,14 +77,34 @@ body,html{
 .letter h3{margin-bottom:10px;color:#8b4513;font-weight:bold;font-size:1.2em;}
 .letter p{color:#5a3b1a;text-align:left;margin-bottom:10px;}
 #backHome{margin-top:20px;padding:12px 25px;background:#ff4d6d;color:white;border:none;border-radius:15px;font-size:1.1em;cursor:pointer;}
+
+/* Name on envelope before opening */
+.envelopeName {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  color: white;
+  font-size: 1.5em;
+  pointer-events: none;
+  z-index: 1;
+  text-shadow: 1px 1px 2px #000;
+}
+
+/* hide the name when envelope opens */
+.envelope.open .envelopeName {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
 </style>
 </head>
 <body>
 
 <!-- Page 1 -->
 <div id="page1" class="page" style="display:flex;">
-  <h1>For My Loveeee 💖</h1>
-  <button id="openBtn">Open This!</button>
+  <h1>FOR MY LOVEEEYYYY💖</h1>
+  <button id="openBtn">OPEN THIS!!!!</button>
 </div>
 
 <!-- Page 2 -->
@@ -98,14 +118,14 @@ body,html{
 
 <!-- Movie Page -->
 <div id="moviePage" class="page">
-  <h2>What movie should we watch? 🍿🎬</h2>
+  <h2>What movie should we watch po loveeyyy? 🍿🎬</h2>
   <div id="movieOptions"></div>
   <div id="movieBubble"></div>
 </div>
 
 <!-- Surprise Page -->
 <div id="surprisePage" class="page">
-  <h2>NOW YOU HAVE REACHED THIS PAGE 💌 I HAVE A LIL SOMETHING FOR YOU BEFORE WE WATCH 💖</h2>
+  <h2>NOW YOU HAVE REACHED THIS PAGE 💌 I HAVE A LIL SOMETHING FOR YOU BEFORE WE WATCH PO 💖</h2>
   <button id="playVideoBtn">Play 🎥</button>
   <video id="surpriseVideo" controls>
     <source src="surprise.mp4" type="video/mp4">
@@ -116,6 +136,8 @@ body,html{
 <div id="letterPage" class="page">
   <h2>💌 A Letter For You 💌</h2>
   <div class="envelope" id="envelope">
+    <!-- Name on envelope -->
+    <div class="envelopeName">JANELA NOLEAL</div>
     <div class="letter" id="letter">
       <h3>“Love is patient, love is kind. It does not envy, it does not boast, it is not proud.”<br>— 1 Corinthians 13:4</h3>
       <p>Hi loveeeyyy ko,</p>
